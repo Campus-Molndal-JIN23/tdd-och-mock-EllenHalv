@@ -14,15 +14,14 @@ public class WeatherService {
         return mockWeatherAPI.getWeatherFromAPI("Stockholm");
     }
 
-    public double getTemperature(String city) {
-        return mockWeatherAPI.getTemperatureFromAPI("Stockholm");
+    public Double getTemperature(String city) { return mockWeatherAPI.getTemperatureFromAPI("Stockholm");
     }
 
-    public int getHumidity(String city) {
+    public Integer getHumidity(String city) {
         return mockWeatherAPI.getHumidityFromAPI("Stockholm");
     }
 
-    public int getClouds(String city) {
+    public Integer getClouds(String city) {
         return mockWeatherAPI.getCloudsFromAPI("Stockholm");
     }
 }

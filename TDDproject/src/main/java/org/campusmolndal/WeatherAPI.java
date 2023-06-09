@@ -9,9 +9,7 @@ public class WeatherAPI {
         return null;
     }
 
-    public Double getTemperatureFromAPI(String city) {
-        return null;
-    }
+    public Double getTemperatureFromAPI(String city) { return null; }
 
     public Integer getHumidityFromAPI(String city) {
         return null;
