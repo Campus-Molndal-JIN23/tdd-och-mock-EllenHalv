@@ -3,7 +3,7 @@ package org.campusmolndal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -13,33 +13,40 @@ import static org.mockito.Mockito.when;
  */
 public class TestWeatherService {
 
-
-    // Set the mockWeatherAPI object to be used by the WeatherService object
-
     @Mock
     WeatherAPI mockWeatherAPI;
     WeatherService weatherService;
 
+    // Set up the mockWeatherAPI object
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        mockWeatherAPI = Mockito.mock(WeatherAPI.class);
         weatherService = new WeatherService(mockWeatherAPI);
+
+        // Set up the behavior of the mockWeatherAPI object
+        when(mockWeatherAPI.getWeatherFromAPI("Stockholm")).thenReturn(
+                "{\n" +
+                        "   \"city\": \"Stockholm\",\n" +
+                        "   \"temperature\": 20.5,\n" +
+                        "   \"humidity\": 65,\n" +
+                        "   \"clouds\": 30\n" +
+                        "}"
+        );
+
+        when(mockWeatherAPI.getTemperatureFromAPI("Stockholm")).thenReturn(20.5);
+        when(mockWeatherAPI.getHumidityFromAPI("Stockholm")).thenReturn(65);
+        when(mockWeatherAPI.getCloudsFromAPI("Stockholm")).thenReturn(30);
     }
 
     @Test
     void testGetWeatherByValidCity() {
         // Arrange
-        String mockJSONResponse = """
-                {
-                "city": "Stockholm",
-                "temperature": 20.5,
-                "humidity": 65,
-                "clouds": 30
-                }
-                """; // mocked JSON response from the API (förslag från chatGPT)
-
-        String expectedWeather = mockJSONResponse;
-        when(mockWeatherAPI.getWeatherFromAPI("Stockholm")).thenReturn(expectedWeather);
+        String expectedWeather = "{\n" +
+                "   \"city\": \"Stockholm\",\n" +
+                "   \"temperature\": 20.5,\n" +
+                "   \"humidity\": 65,\n" +
+                "   \"clouds\": 30\n" +
+                "}";
 
         // Act
         String actualWeather = weatherService.getWeather("Stockholm");
@@ -51,46 +58,48 @@ public class TestWeatherService {
     @Test
     void testGetTemperatureByValidCity() {
         // Arrange
-        Double expectedTemperature = null;
-        when(mockWeatherAPI.getTemperatureFromAPI("Stockholm")).thenReturn(expectedTemperature);
+        double expectedTemperature = 20.5;
 
         // Act
-        Double actualTemperature = weatherService.getTemperature("Stockholm");
+        double actualTemperature = weatherService.getTemperature("Stockholm");
 
         // Assert
-        assertNull(actualTemperature);
+        assertEquals(expectedTemperature, actualTemperature);
     }
-
-
 
     @Test
     void testGetHumidityByValidCity() {
-        Integer expectedHumidity = null;
-        when(mockWeatherAPI.getHumidityFromAPI("Stockholm")).thenReturn(expectedHumidity);
+        // Arrange
+        int expectedHumidity = 65;
 
-        Integer actualHumidity = weatherService.getHumidity("Stockholm");
+        // Act
+        int actualHumidity = weatherService.getHumidity("Stockholm");
 
-        assertNull(actualHumidity);
+        // Assert
+        assertEquals(expectedHumidity, actualHumidity);
     }
 
     @Test
     void testGetCloudsByValidCity() {
-        Integer expectedClouds = null;
-        when(mockWeatherAPI.getCloudsFromAPI("Stockholm")).thenReturn(expectedClouds);
+        // Arrange
+        int expectedClouds = 30;
 
-        Integer actualClouds = weatherService.getClouds("Stockholm");
+        // Act
+        int actualClouds = weatherService.getClouds("Stockholm");
 
-        assertNull(actualClouds);
+        // Assert
+        assertEquals(expectedClouds, actualClouds);
     }
+
     @Test
     void getWeatherByInvalidCity() {
-        //arrange
+        // Arrange
         when(mockWeatherAPI.getWeatherFromAPI("Invalid City")).thenReturn(null);
 
-        //act
+        // Act
         String actualWeather = weatherService.getWeather("Invalid City");
 
-        //assert
+        // Assert
         assertNull(actualWeather);
     }
 }
