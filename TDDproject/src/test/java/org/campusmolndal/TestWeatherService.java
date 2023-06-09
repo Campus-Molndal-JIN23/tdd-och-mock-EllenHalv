@@ -92,7 +92,7 @@ public class TestWeatherService {
     }
 
     @Test
-    void getWeatherByInvalidCity() {
+    void testGetWeatherByInvalidCity() {
         // Arrange
         when(mockWeatherAPI.getWeatherFromAPI("Invalid City")).thenReturn(null);
 
